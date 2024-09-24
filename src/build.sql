@@ -1,0 +1,47 @@
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS rides CASCADE;
+DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS passenger CASCADE;
+
+CREATE TABLE users(
+	id SERIAL PRIMARY KEY NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	instructions VARCHAR(100) DEFAULT 'No special instructions',
+	rating FLOAT DEFAULT 0,
+	location POINT DEFAULT point(0, 0),
+	zipcode INTEGER,
+	date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	rider BOOLEAN,
+	available_rider BOOLEAN DEFAULT FALSE,
+	credit_card_num BIGINT,
+	driver BOOLEAN,
+	available_driver BOOLEAN DEFAULT FALSE,
+	car_make VARCHAR(50),
+	car_model VARCHAR(50),
+	license_num VARCHAR(20)
+);
+
+CREATE TABLE reviews(
+	id SERIAL PRIMARY KEY NOT NULL,
+	passenger_id INTEGER NOT NULL,
+	rides_id INTEGER NOT NULL,
+	rating INTEGER NOT NULL,
+	review VARCHAR(100) NOT NULL,
+	response VARCHAR(100)
+);
+
+CREATE TABLE rides(
+	id SERIAL PRIMARY KEY NOT NULL,
+	driver INTEGER REFERENCES users(id) NOT NULL,
+	passenger_id INTEGER NOT NULL,
+	price INTEGER,
+	day_happened TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP,
+	starting_point POINT,
+	destination POINT
+);
+
+CREATE TABLE passenger(
+	id SERIAL PRIMARY KEY NOT NULL,
+	user_id INTEGER NOT NULL,
+	rides_id INTEGER
+)
